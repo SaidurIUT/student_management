@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -11,7 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TeacherMainFormController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TeacherMainFormController">
    <children>
       <AnchorPane fx:id="main_form" prefHeight="200.0" prefWidth="200.0">
          <children>
@@ -36,15 +37,11 @@
                         </Label>
                         <Button fx:id="addStudent_btn" layoutX="9.0" layoutY="181.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../Design/MainForm.css" text="Add Students" />
                         <Button fx:id="subjectHandle_btn" layoutX="9.0" layoutY="233.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../Design/MainForm.css" text="Subjects handle" />
-                        <Button fx:id="logout_btn" layoutX="9.0" layoutY="516.0" mnemonicParsing="false" onAction="#logoutBtn" styleClass="nav-btn" stylesheets="@../Design/MainForm.css">
+                        <Button fx:id="logout_btn" layoutX="9.0" layoutY="516.0" mnemonicParsing="false" onAction="#logoutBtn" prefHeight="27.0" prefWidth="194.0" styleClass="nav-btn" stylesheets="@../Design/MainForm.css" text="Sign Out">
                            <graphic>
                            </graphic>
                         </Button>
-                        <Label layoutX="58.0" layoutY="522.0" text="Sign Out" textFill="WHITE">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
+                        <FontAwesomeIconView fill="WHITE" glyphName="POWER_OFF" layoutX="32.0" layoutY="534.0" size="" tabSize="12" />
                      </children>
                   </AnchorPane>
                </left>
@@ -79,21 +76,23 @@
                                     <ComboBox fx:id="addStudents_course" layoutX="115.0" layoutY="37.0" prefWidth="150.0" promptText="Choose..." />
                                     <Label layoutX="73.0" layoutY="82.0" text="Year:" />
                                     <ComboBox fx:id="addStudents_year" layoutX="115.0" layoutY="78.0" onAction="#addStudentsYearList" prefWidth="150.0" promptText="Choose..." />
-                                    <Label layoutX="47.0" layoutY="167.0" text="Full Name:" />
-                                    <Label fx:id="addStudents_label_fullName" layoutX="114.0" layoutY="167.0" prefHeight="17.0" prefWidth="189.0" text="----------" />
-                                    <Label layoutX="64.0" layoutY="193.0" text="Gender:" />
-                                    <Label fx:id="addStudents_label_gender" layoutX="113.0" layoutY="193.0" prefHeight="17.0" prefWidth="189.0" text="----------" />
+                                    <Label layoutX="43.0" layoutY="202.0" text="Full Name:" />
+                                    <Label fx:id="addStudents_label_fullName" layoutX="110.0" layoutY="202.0" prefHeight="17.0" prefWidth="189.0" text="----------" />
+                                    <Label layoutX="60.0" layoutY="228.0" text="Gender:" />
+                                    <Label fx:id="addStudents_label_gender" layoutX="109.0" layoutY="228.0" prefHeight="17.0" prefWidth="189.0" text="----------" />
                                     <Label layoutX="46.0" layoutY="118.0" text="Student ID:" />
                                     <ComboBox fx:id="addStudents_studentID" layoutX="115.0" layoutY="114.0" onAction="#addStudentsStudentNumber" prefWidth="150.0" promptText="Choose..." />
-                                    <Label layoutX="50.0" layoutY="224.0" text="Semester:" />
-                                    <Label fx:id="addStudents_label_semester" layoutX="113.0" layoutY="224.0" prefHeight="17.0" prefWidth="189.0" text="----------" />
-                                    <Label layoutX="72.0" layoutY="250.0" text="Year:" />
-                                    <Label fx:id="addStudents_label_year" layoutX="112.0" layoutY="250.0" prefHeight="17.0" prefWidth="189.0" text="----------" />
-                                    <Label layoutX="65.0" layoutY="280.0" text="Course:" />
-                                    <Label fx:id="addStudents_label_course" layoutX="116.0" layoutY="280.0" prefHeight="17.0" prefWidth="189.0" text="----------" />
+                                    <Label layoutX="46.0" layoutY="259.0" text="Semester:" />
+                                    <Label fx:id="addStudents_label_semester" layoutX="109.0" layoutY="259.0" prefHeight="17.0" prefWidth="189.0" text="----------" />
+                                    <Label layoutX="68.0" layoutY="285.0" text="Year:" />
+                                    <Label fx:id="addStudents_label_year" layoutX="108.0" layoutY="285.0" prefHeight="17.0" prefWidth="189.0" text="----------" />
+                                    <Label layoutX="61.0" layoutY="315.0" text="Course:" />
+                                    <Label fx:id="addStudents_label_course" layoutX="112.0" layoutY="315.0" prefHeight="17.0" prefWidth="189.0" text="----------" />
                                     <Button fx:id="addStudents_addBtn" layoutX="43.0" layoutY="386.0" mnemonicParsing="false" onAction="#addStudentsAddBtn" prefHeight="36.0" prefWidth="97.0" styleClass="btn" stylesheets="@../Design/MainForm.css" text="Add" />
                                     <Button fx:id="addStudents_clearBtn" layoutX="179.0" layoutY="386.0" mnemonicParsing="false" onAction="#addStudentClearBtn" prefHeight="36.0" prefWidth="97.0" styleClass="btn" stylesheets="@../Design/MainForm.css" text="Clear" />
                                     <Button fx:id="addStudents_removeBtn" layoutX="179.0" layoutY="440.0" mnemonicParsing="false" onAction="#addStudentsRemoveBtn" prefHeight="36.0" prefWidth="97.0" styleClass="btn" stylesheets="@../Design/MainForm.css" text="Remove" />
+                                    <Label layoutX="66.0" layoutY="155.0" text="Subject" />
+                                    <ComboBox fx:id="addStudents_subject" layoutX="115.0" layoutY="151.0" prefWidth="150.0" promptText="Choose..." />
                                  </children>
                               </AnchorPane>
                               <AnchorPane layoutX="335.0" layoutY="15.0" prefHeight="533.0" prefWidth="534.0" stylesheets="@../Design/MainForm.css" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="335.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="15.0">
@@ -109,6 +108,7 @@
                                         <TableColumn fx:id="addStudents_col_name" prefWidth="75.0" text="Name" />
                                           <TableColumn fx:id="addStudents_col_gender" prefWidth="75.0" text="Gender" />
                                           <TableColumn fx:id="addStudents_col_course" prefWidth="75.0" text="Course" />
+                                          <TableColumn fx:id="addStudents_col_subject" prefWidth="75.0" text="Subject" />
                                           <TableColumn fx:id="addStudents_col_year" prefWidth="75.0" text="Year" />
                                           <TableColumn fx:id="addStudents_col_semester" prefWidth="74.0" text="Semester" />
                                           <TableColumn fx:id="addStudents_col_date" prefWidth="57.0" text="Date" />

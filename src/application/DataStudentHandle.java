@@ -14,9 +14,10 @@ public class DataStudentHandle {
 	private Date dateInsert;
 	private Date dateDelete;
 	private String status;
+	private String subject;
 
 	public DataStudentHandle(String studentID, String name, String gender, String course, String year, String semester,
-			Date dateInsert, Date dateDelete, String status) {
+			Date dateInsert, Date dateDelete, String status, String subject) {
 		this.studentID = studentID;
 		this.name = name;
 		this.gender = gender;
@@ -26,14 +27,17 @@ public class DataStudentHandle {
 		this.dateInsert = dateInsert;
 		this.dateDelete = dateDelete;
 		this.status = status;
+		this.subject = subject;
 	}
 
-	public DataStudentHandle(String teacherID, String studentID, String name, String gender, Date dateInsert) {
+	public DataStudentHandle(String teacherID, String studentID, String name, String gender, Date dateInsert,
+			String subject) {
 		this.teacherID = teacherID;
 		this.studentID = studentID;
 		this.name = name;
 		this.gender = gender;
 		this.dateInsert = dateInsert;
+		this.subject = subject;
 	}
 
 	public String getTeacherID() {
@@ -74,6 +78,10 @@ public class DataStudentHandle {
 
 	public String getStatus() {
 		return status;
+	}
+
+	public String getSubject() {
+		return subject;
 	}
 
 }

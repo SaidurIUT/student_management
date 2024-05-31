@@ -69,6 +69,9 @@ public class TeacherMainFormController implements Initializable {
 	private ComboBox<String> addStudents_studentID;
 
 	@FXML
+	private ComboBox<String> addStudents_subject;
+
+	@FXML
 	private Label addStudents_label_semester;
 
 	@FXML
@@ -109,6 +112,9 @@ public class TeacherMainFormController implements Initializable {
 
 	@FXML
 	private TableColumn<DataStudentHandle, String> addStudents_col_date;
+
+	@FXML
+	private TableColumn<DataStudentHandle, String> addStudents_col_subject;
 
 	@FXML
 	private AnchorPane subjectHandle_form;
@@ -162,7 +168,8 @@ public class TeacherMainFormController implements Initializable {
 		} else {
 
 			String insertData = "INSERT INTO teacher_student " + "(teacher_id, stud_studentID, stud_name, stud_gender"
-					+ ", stud_year, stud_course, stud_semester" + ", date_insert, status) VALUES(?,?,?,?,?,?,?,?,?)";
+					+ ", stud_year, stud_course, stud_semester"
+					+ ", date_insert, status, subject_code) VALUES(?,?,?,?,?,?,?,?,?,?)";
 			connect = Database.connectDB();
 
 			Date date = new Date();
@@ -179,6 +186,7 @@ public class TeacherMainFormController implements Initializable {
 				prepare.setString(7, addStudents_label_semester.getText());
 				prepare.setString(8, String.valueOf(sqlDate));
 				prepare.setString(9, "Active");
+				prepare.setString(10, addStudents_subject.getSelectionModel().getSelectedItem());
 
 				prepare.executeUpdate();
 
@@ -267,7 +275,7 @@ public class TeacherMainFormController implements Initializable {
 				dshData = new DataStudentHandle(result.getString("stud_studentID"), result.getString("stud_name"),
 						result.getString("stud_gender"), result.getString("stud_course"), result.getString("stud_year"),
 						result.getString("stud_semester"), result.getDate("date_insert"), result.getDate("date_delete"),
-						result.getString("status"));
+						result.getString("status"), result.getString("subject_code"));
 
 				listData.add(dshData);
 			}
@@ -290,6 +298,7 @@ public class TeacherMainFormController implements Initializable {
 		addStudents_col_year.setCellValueFactory(new PropertyValueFactory<>("year"));
 		addStudents_col_semester.setCellValueFactory(new PropertyValueFactory<>("semester"));
 		addStudents_col_date.setCellValueFactory(new PropertyValueFactory<>("dateInsert"));
+		addStudents_col_subject.setCellValueFactory(new PropertyValueFactory<>("subject"));
 
 		addStudents_tableView.setItems(addStudentGetData);
 
@@ -332,6 +341,29 @@ public class TeacherMainFormController implements Initializable {
 			}
 
 			addStudents_course.setItems(listData);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void addStudentSubjectList() {
+
+		String sql = "SELECT * FROM subject WHERE date_delete IS NULL";
+
+		connect = Database.connectDB();
+
+		try {
+			prepare = connect.prepareStatement(sql);
+			result = prepare.executeQuery();
+
+			ObservableList listData = FXCollections.observableArrayList();
+
+			while (result.next()) {
+				listData.add(result.getString("subject_code"));
+			}
+
+			addStudents_subject.setItems(listData);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -752,6 +784,7 @@ public class TeacherMainFormController implements Initializable {
 		addStudentCourseList();
 		addStudentsYearList();
 		addStudentDisplayData();
+		addStudentSubjectList();
 
 	}
 
