@@ -12,9 +12,10 @@ public class SubjectData {
 	private Date dateUpdate;
 	private Date dateDelete;
 	private String status;
+	private Float credit;
 
 	public SubjectData(Integer id, String subjectCode, String subject, String course, Date dateInsert, Date dateUpdate,
-			Date dateDelete, String status) {
+			Date dateDelete, String status, Float credit) {
 		this.id = id;
 		this.subjectCode = subjectCode;
 		this.subject = subject;
@@ -23,6 +24,7 @@ public class SubjectData {
 		this.dateUpdate = dateUpdate;
 		this.dateDelete = dateDelete;
 		this.status = status;
+		this.credit = credit;
 	}
 
 	public Integer getId() {
@@ -55,6 +57,10 @@ public class SubjectData {
 
 	public String getStatus() {
 		return status;
+	}
+
+	public Float getCredit() {
+		return credit;
 	}
 
 }

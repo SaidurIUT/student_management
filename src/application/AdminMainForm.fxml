@@ -414,10 +414,12 @@
                                           <ComboBox fx:id="addSubject_course" layoutX="131.0" layoutY="173.0" prefWidth="150.0" promptText="Choose..." />
                                           <Label layoutX="75.0" layoutY="220.0" text="Status:" />
                                           <ComboBox fx:id="addSubject_status" layoutX="131.0" layoutY="216.0" prefWidth="150.0" promptText="Choose..." />
-                                          <Button fx:id="addSubject_addBtn" layoutX="38.0" layoutY="283.0" mnemonicParsing="false" onAction="#addSubjectAddBtn" prefHeight="41.0" prefWidth="96.0" styleClass="btn" stylesheets="@../Design/MainForm.css" text="Add" />
-                                          <Button fx:id="addSubject_updateBtn" layoutX="186.0" layoutY="283.0" mnemonicParsing="false" onAction="#addSubjectUpdateBtn" prefHeight="41.0" prefWidth="96.0" styleClass="btn" stylesheets="@../Design/MainForm.css" text="Update" />
-                                          <Button fx:id="addSubject_clearBtn" layoutX="38.0" layoutY="344.0" mnemonicParsing="false" onAction="#addSubjectClear" prefHeight="41.0" prefWidth="96.0" styleClass="btn" stylesheets="@../Design/MainForm.css" text="Clear" />
-                                          <Button fx:id="addSubject_deleteBtn" layoutX="186.0" layoutY="344.0" mnemonicParsing="false" onAction="#addSubjectDeleteBtn" prefHeight="41.0" prefWidth="96.0" styleClass="btn" stylesheets="@../Design/MainForm.css" text="Delete" />
+                                          <Button fx:id="addSubject_addBtn" layoutX="38.0" layoutY="329.0" mnemonicParsing="false" onAction="#addSubjectAddBtn" prefHeight="41.0" prefWidth="96.0" styleClass="btn" stylesheets="@../Design/MainForm.css" text="Add" />
+                                          <Button fx:id="addSubject_updateBtn" layoutX="186.0" layoutY="329.0" mnemonicParsing="false" onAction="#addSubjectUpdateBtn" prefHeight="41.0" prefWidth="96.0" styleClass="btn" stylesheets="@../Design/MainForm.css" text="Update" />
+                                          <Button fx:id="addSubject_clearBtn" layoutX="38.0" layoutY="390.0" mnemonicParsing="false" onAction="#addSubjectClear" prefHeight="41.0" prefWidth="96.0" styleClass="btn" stylesheets="@../Design/MainForm.css" text="Clear" />
+                                          <Button fx:id="addSubject_deleteBtn" layoutX="186.0" layoutY="390.0" mnemonicParsing="false" onAction="#addSubjectDeleteBtn" prefHeight="41.0" prefWidth="96.0" styleClass="btn" stylesheets="@../Design/MainForm.css" text="Delete" />
+                                          <Label layoutX="75.0" layoutY="258.0" prefHeight="17.0" prefWidth="48.0" text="Credit:" />
+                                          <TextField fx:id="addSubject_credit" layoutX="131.0" layoutY="254.0" />
                                        </children>
                                     </AnchorPane>
                                     <AnchorPane layoutX="355.0" layoutY="16.0" prefHeight="532.0" prefWidth="512.0" stylesheets="@../Design/MainForm.css" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="355.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="16.0">
@@ -439,6 +441,7 @@
                                                 <TableColumn fx:id="addSubject_col_course" prefWidth="108.0" text="Course" />
                                                 <TableColumn fx:id="addSubject_col_dateInsert" prefWidth="89.0" text="Date Insert" />
                                                 <TableColumn fx:id="addSubject_col_status" prefWidth="78.0" text="Status" />
+                                                <TableColumn fx:id="addSubject_col_credit" prefWidth="124.0" text="Credit" />
                                              </columns>
                                              <columnResizePolicy>
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

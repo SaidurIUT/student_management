@@ -245,6 +245,9 @@ public class AdminMainFormController implements Initializable {
 	private TextField addSubject_code;
 
 	@FXML
+	private TextField addSubject_credit;
+
+	@FXML
 	private TextField addSubject_subject;
 
 	@FXML
@@ -282,6 +285,9 @@ public class AdminMainFormController implements Initializable {
 
 	@FXML
 	private TableColumn<SubjectData, String> addSubject_col_status;
+
+	@FXML
+	private TableColumn<StudentData, String> addSubject_col_credit;
 
 	@FXML
 	private AnchorPane payment_form;
@@ -1315,7 +1321,8 @@ public class AdminMainFormController implements Initializable {
 			while (result.next()) {
 				sData = new SubjectData(result.getInt("id"), result.getString("subject_code"),
 						result.getString("subject"), result.getString("course"), result.getDate("date_insert"),
-						result.getDate("date_update"), result.getDate("date_delete"), result.getString("status"));
+						result.getDate("date_update"), result.getDate("date_delete"), result.getString("status"),
+						result.getFloat("credit"));
 
 				listData.add(sData);
 			}
@@ -1336,6 +1343,7 @@ public class AdminMainFormController implements Initializable {
 		addSubject_col_course.setCellValueFactory(new PropertyValueFactory<>("course"));
 		addSubject_col_dateInsert.setCellValueFactory(new PropertyValueFactory<>("dateInsert"));
 		addSubject_col_status.setCellValueFactory(new PropertyValueFactory<>("status"));
+		addSubject_col_credit.setCellValueFactory(new PropertyValueFactory<>("credit"));
 
 		addSubject_tableView.setItems(addSubjectListData);
 	}
@@ -1354,6 +1362,7 @@ public class AdminMainFormController implements Initializable {
 		addSubject_subject.setText(sData.getSubject());
 		addSubject_course.getSelectionModel().select(sData.getCourse());
 		addSubject_status.getSelectionModel().select(sData.getStatus());
+		addSubject_credit.setText(String.valueOf(sData.getCredit()));
 
 		subjectID = sData.getId();
 	}
@@ -1362,7 +1371,8 @@ public class AdminMainFormController implements Initializable {
 
 		if (addSubject_code.getText().isEmpty() || addSubject_subject.getText().isEmpty()
 				|| addSubject_course.getSelectionModel().getSelectedItem().isEmpty()
-				|| addSubject_status.getSelectionModel().getSelectedItem().isEmpty()) {
+				|| addSubject_status.getSelectionModel().getSelectedItem().isEmpty()
+				|| addSubject_credit.getText().isEmpty()) {
 			alert.errorMessage("Please fill all blank fields");
 		} else {
 			connect = Database.connectDB();
@@ -1379,8 +1389,8 @@ public class AdminMainFormController implements Initializable {
 					Date date = new Date();
 					java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
-					String insertData = "INSERT INTO subject " + "(subject_code, subject, course, date_insert, status) "
-							+ "VALUES(?,?,?,?,?)";
+					String insertData = "INSERT INTO subject "
+							+ "(subject_code, subject, course, date_insert, status, credit) " + "VALUES(?,?,?,?,?,?)";
 
 					prepare = connect.prepareStatement(insertData);
 					prepare.setString(1, addSubject_code.getText());
@@ -1388,7 +1398,7 @@ public class AdminMainFormController implements Initializable {
 					prepare.setString(3, addSubject_course.getSelectionModel().getSelectedItem());
 					prepare.setString(4, String.valueOf(sqlDate));
 					prepare.setString(5, addSubject_status.getSelectionModel().getSelectedItem());
-
+					prepare.setFloat(6, Float.parseFloat(addSubject_credit.getText()));
 					prepare.executeUpdate();
 
 					addSubjectDisplayData();
@@ -1403,11 +1413,53 @@ public class AdminMainFormController implements Initializable {
 		}
 	}
 
+//	public void addSubjectUpdateBtn() {
+//
+//		if (addSubject_code.getText().isEmpty() || addSubject_subject.getText().isEmpty()
+//				|| addSubject_course.getSelectionModel().getSelectedItem().isEmpty()
+//				|| addSubject_status.getSelectionModel().getSelectedItem().isEmpty()
+//				|| addSubject_credit.getText().isEmpty()) {
+//			alert.errorMessage("Please fill all blank fields");
+//		} else {
+//			if (alert.confirmMessage(
+//					"Are you sure you want to Update the Subject Code: " + addSubject_code.getText() + "?")) {
+//				Date date = new Date();
+//				java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+//
+//				String updateData = "UPDATE subject SET subject_code = '" + addSubject_code.getText() + "', subject = '"
+//						+ addSubject_subject.getText() + "', course = '"
+//						+ addSubject_course.getSelectionModel().getSelectedItem() + "', date_update = '" + sqlDate
+//						+ "', status = '" + addSubject_status.getSelectionModel().getSelectedItem() + "' "
+//						+ "WHERE id = " + subjectID + " AND date_delete IS NULL" + " AND credit = "
+//						+ Float.parseFloat(addSubject_credit.getText());
+//
+//				connect = Database.connectDB();
+//
+//				try {
+//					prepare = connect.prepareStatement(updateData);
+//					prepare.executeUpdate();
+//
+//					addSubjectDisplayData();
+//
+//					alert.successMessage("Updated Successfully!");
+//
+//					addSubjectClear();
+//
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			} else {
+//				alert.errorMessage("Cancelled");
+//			}
+//		}
+//	}
+
 	public void addSubjectUpdateBtn() {
 
 		if (addSubject_code.getText().isEmpty() || addSubject_subject.getText().isEmpty()
 				|| addSubject_course.getSelectionModel().getSelectedItem().isEmpty()
-				|| addSubject_status.getSelectionModel().getSelectedItem().isEmpty()) {
+				|| addSubject_status.getSelectionModel().getSelectedItem().isEmpty()
+				|| addSubject_credit.getText().isEmpty()) {
 			alert.errorMessage("Please fill all blank fields");
 		} else {
 			if (alert.confirmMessage(
@@ -1415,16 +1467,21 @@ public class AdminMainFormController implements Initializable {
 				Date date = new Date();
 				java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
-				String updateData = "UPDATE subject SET subject_code = '" + addSubject_code.getText() + "', subject = '"
-						+ addSubject_subject.getText() + "', course = '"
-						+ addSubject_course.getSelectionModel().getSelectedItem() + "', date_update = '" + sqlDate
-						+ "', status = '" + addSubject_status.getSelectionModel().getSelectedItem() + "' "
-						+ "WHERE id = " + subjectID;
+				String updateData = "UPDATE subject SET subject_code = ?, subject = ?, course = ?, date_update = ?, status = ?, credit = ? "
+						+ "WHERE id = ? AND date_delete IS NULL";
 
 				connect = Database.connectDB();
 
 				try {
 					prepare = connect.prepareStatement(updateData);
+					prepare.setString(1, addSubject_code.getText());
+					prepare.setString(2, addSubject_subject.getText());
+					prepare.setString(3, addSubject_course.getSelectionModel().getSelectedItem());
+					prepare.setDate(4, sqlDate);
+					prepare.setString(5, addSubject_status.getSelectionModel().getSelectedItem());
+					prepare.setFloat(6, Float.parseFloat(addSubject_credit.getText()));
+					prepare.setInt(7, subjectID);
+
 					prepare.executeUpdate();
 
 					addSubjectDisplayData();
@@ -1480,6 +1537,7 @@ public class AdminMainFormController implements Initializable {
 		addSubject_subject.clear();
 		addSubject_course.getSelectionModel().clearSelection();
 		addSubject_status.getSelectionModel().clearSelection();
+		addSubject_credit.clear();
 	}
 
 	public void addSubjectCourseList() {
