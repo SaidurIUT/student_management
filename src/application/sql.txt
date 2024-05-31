@@ -35,6 +35,9 @@ SELECT DATE(date_insert), COUNT(id) FROM student WHERE date_delete IS NULL GROUP
 // );
 
 
+
+
+
 CREATE TABLE salary(
 id INT PRIMARY KEY AUTO_INCREMENT,
 teacher_id VARCHAR(50),
@@ -83,7 +86,12 @@ CREATE TABLE teacher_handle (
 );
 
 
+
 hey I am ali ,   I am making some changes in this file
+a branch has created for ali
+a branch has created for anik again
+
+
 
 
 
