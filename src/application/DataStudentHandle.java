@@ -40,6 +40,14 @@ public class DataStudentHandle {
 		this.subject = subject;
 	}
 
+	public DataStudentHandle(String teacherID, String studentID, String name, String gender, Date dateInsert) {
+		this.teacherID = teacherID;
+		this.studentID = studentID;
+		this.name = name;
+		this.gender = gender;
+		this.dateInsert = dateInsert;
+	}
+
 	public String getTeacherID() {
 		return teacherID;
 	}

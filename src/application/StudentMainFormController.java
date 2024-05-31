@@ -5,10 +5,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,40 +20,89 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class StudentMainFormController implements Initializable {
 
 	@FXML
-	private Label student_id;
+	private Circle circle_image;
 
 	@FXML
-	private Button studentInformation_btn;
+	private Button courseInformation_btn;
 
 	@FXML
 	private Button logout_btn;
 
 	@FXML
-	private TableView<DataStudentHandle> table_view;
+	private Button resultInformation_btn;
 
 	@FXML
-	private TableColumn<DataStudentHandle, String> studentInfo_col_teacherID;
+	private Button studentInformation_btn;
 
 	@FXML
-	private TableColumn<DataStudentHandle, String> studentInfo_col_name;
+	private AnchorPane studentInformation_pan;
 
 	@FXML
-	private TableColumn<DataStudentHandle, String> studentInfo_col_gender;
+	private Label student_id;
 
 	@FXML
-	private TableColumn<DataStudentHandle, String> studentInfo_col_YE;
+	private Label student_name;
 
 	@FXML
-	private Circle circle_image;
+	private Label studentinfo_studentAge;
+
+	@FXML
+	private Label studentinfo_studentBD;
+
+	@FXML
+	private Label studentinfo_studentCourse;
+
+	@FXML
+	private Label studentinfo_studentEmail;
+
+	@FXML
+	private Label studentinfo_studentGender;
+
+	@FXML
+	private Label studentinfo_studentID;
+
+	@FXML
+	private Label studentinfo_studentSection;
+
+	@FXML
+	private Label studentinfo_studentSemister;
+
+	@FXML
+	private Label studentinfo_studentYear;
+
+	@FXML
+	private Label studentinfo_studentfullname;
+
+	@FXML
+	private TableColumn<?, ?> teacherInfo_col_teacherGender;
+
+	@FXML
+	private TableColumn<?, ?> teacherInfo_col_teacherID;
+
+	@FXML
+	private TableColumn<?, ?> teacherInfo_col_teacherName;
+
+	@FXML
+	private TableColumn<?, ?> teacherInfo_col_teacherYE;
+
+	@FXML
+	private Button teacherInformation_btn;
+
+	@FXML
+	private AnchorPane teacherInformation_pan;
+
+	@FXML
+	private Label teacher_date;
+
+	@FXML
+	private Label teacher_gender;
 
 	@FXML
 	private Label teacher_id;
@@ -60,10 +111,17 @@ public class StudentMainFormController implements Initializable {
 	private Label teacher_name;
 
 	@FXML
-	private Label teacher_gender;
+	private TableView<?> teacher_table_view;
 
 	@FXML
-	private Label teacher_date;
+	void studentInformationBtn(ActionEvent event) {
+
+	}
+
+	@FXML
+	void teacherInformationBtn(ActionEvent event) {
+
+	}
 
 	private Connection connect;
 	private PreparedStatement prepare;
@@ -105,53 +163,60 @@ public class StudentMainFormController implements Initializable {
 
 	private ObservableList<DataStudentHandle> teacherListData;
 
-	public void teacherDisplayData() {
-		teacherListData = teacherSetData();
+//	public void teacherDisplayData() {
+//		teacherListData = teacherSetData();
+//
+//		studentInfo_col_teacherID.setCellValueFactory(new PropertyValueFactory<>("teacherID"));
+//		studentInfo_col_name.setCellValueFactory(new PropertyValueFactory<>("name"));
+//		studentInfo_col_gender.setCellValueFactory(new PropertyValueFactory<>("gender"));
+//		studentInfo_col_YE.setCellValueFactory(new PropertyValueFactory<>("dateInsert"));
+//
+//		table_view.setItems(teacherListData);
+//	}
 
-		studentInfo_col_teacherID.setCellValueFactory(new PropertyValueFactory<>("teacherID"));
-		studentInfo_col_name.setCellValueFactory(new PropertyValueFactory<>("name"));
-		studentInfo_col_gender.setCellValueFactory(new PropertyValueFactory<>("gender"));
-		studentInfo_col_YE.setCellValueFactory(new PropertyValueFactory<>("dateInsert"));
-
-		table_view.setItems(teacherListData);
-	}
-
-	private Image image;
+//	private Image image;
+//
+//	public void teacherSelectData() {
+//		DataStudentHandle dsh = table_view.getSelectionModel().getSelectedItem();
+//		int num = table_view.getSelectionModel().getSelectedIndex();
+//
+//		if ((num - 1) < -1) {
+//			return;
+//		}
+//
+//		String sql = "SELECT * FROM teacher WHERE teacher_id = '" + dsh.getTeacherID() + "'";
+//
+//		connect = Database.connectDB();
+//
+//		try {
+//			prepare = connect.prepareStatement(sql);
+//			result = prepare.executeQuery();
+//
+//			if (result.next()) {
+//
+//				String path = "File:" + result.getString("image");
+//
+//				image = new Image(path, 164, 73, false, true);
+//				circle_image.setFill(new ImagePattern(image));
+//
+//				teacher_id.setText(result.getString("teacher_id"));
+//				teacher_name.setText(result.getString("full_name"));
+//				teacher_gender.setText(result.getString("gender"));
+//				teacher_date.setText(result.getString("date_insert"));
+//			}
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
+//	}
 
 	public void teacherSelectData() {
-		DataStudentHandle dsh = table_view.getSelectionModel().getSelectedItem();
-		int num = table_view.getSelectionModel().getSelectedIndex();
 
-		if ((num - 1) < -1) {
-			return;
-		}
+	};
 
-		String sql = "SELECT * FROM teacher WHERE teacher_id = '" + dsh.getTeacherID() + "'";
-
-		connect = Database.connectDB();
-
-		try {
-			prepare = connect.prepareStatement(sql);
-			result = prepare.executeQuery();
-
-			if (result.next()) {
-
-				String path = "File:" + result.getString("image");
-
-				image = new Image(path, 164, 73, false, true);
-				circle_image.setFill(new ImagePattern(image));
-
-				teacher_id.setText(result.getString("teacher_id"));
-				teacher_name.setText(result.getString("full_name"));
-				teacher_gender.setText(result.getString("gender"));
-				teacher_date.setText(result.getString("date_insert"));
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
+	private long student_id1;
+	private String student_email;
 
 	public void studentIDDisplay() {
 
@@ -165,6 +230,46 @@ public class StudentMainFormController implements Initializable {
 
 			if (result.next()) {
 				student_id.setText(result.getString("student_id"));
+				student_name.setText(ListData.student_username);
+				student_id1 = result.getInt("student_id");
+				student_email = result.getString("email");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void showStudentInforamtion() {
+
+		String sql = "SELECT * FROM student WHERE student_id = '" + student_id1 + "'";
+
+		connect = Database.connectDB();
+
+		try {
+			prepare = connect.prepareStatement(sql);
+			result = prepare.executeQuery();
+
+			if (result.next()) {
+				studentinfo_studentfullname.setText(result.getString("full_name"));
+				studentinfo_studentID.setText(String.valueOf(result.getLong("student_id")));
+				studentinfo_studentGender.setText(result.getString("gender"));
+				studentinfo_studentCourse.setText(result.getString("course"));
+				studentinfo_studentYear.setText(result.getString("year"));
+				studentinfo_studentSemister.setText(result.getString("semester"));
+				studentinfo_studentSection.setText(result.getString("section"));
+				studentinfo_studentEmail.setText(student_email);
+				studentinfo_studentAge.setText(String.valueOf(result.getInt("age")));
+
+				java.sql.Date birthDate = result.getDate("birth_date");
+				if (birthDate != null) {
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+					studentinfo_studentBD.setText(dateFormat.format(birthDate));
+				} else {
+					studentinfo_studentBD.setText("");
+				}
+
 			}
 
 		} catch (Exception e) {
@@ -196,8 +301,9 @@ public class StudentMainFormController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		teacherDisplayData();
+		// teacherDisplayData();
 		studentIDDisplay();
+		showStudentInforamtion();
 
 	}
 
