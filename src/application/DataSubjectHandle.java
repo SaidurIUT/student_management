@@ -7,14 +7,14 @@ public class DataSubjectHandle {
 	private Integer id;
 	private String subjectCode;
 	private String subject;
-	private Date insertData;
+	private Date insertDate;
 	private String status;
 
 	public DataSubjectHandle(Integer id, String subjectCode, String subject, Date insertData, String status) {
 		this.id = id;
 		this.subjectCode = subjectCode;
 		this.subject = subject;
-		this.insertData = insertData;
+		this.insertDate = insertData;
 		this.status = status;
 	}
 
@@ -31,7 +31,7 @@ public class DataSubjectHandle {
 	}
 
 	public Date getInsertDate() {
-		return insertData;
+		return insertDate;
 	}
 
 	public String getStatus() {

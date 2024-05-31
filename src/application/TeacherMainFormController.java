@@ -403,14 +403,86 @@ public class TeacherMainFormController implements Initializable {
 
 	}
 
-	public void subjectHandleAddBtn() {
+//	public void subjectHandleAddBtn() {
+//
+//		if (subjecthandle_code.getSelectionModel().getSelectedItem().isEmpty()
+//				|| subjecthandle_subject.getSelectionModel().getSelectedItem().isEmpty()
+//				|| subjecthandle_status.getSelectionModel().getSelectedItem().isEmpty()) {
+//			alert.errorMessage("Please fill all blank fields");
+//		} else {
+//			String insertData = "INSERT INTO teacher_handle (subject_code, subject, date, status) " + "VALUES(?,?,?,?)";
+//			connect = Database.connectDB();
+//
+//			Date date = new Date();
+//			java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+//
+//			try {
+//				prepare = connect.prepareStatement(insertData);
+//				prepare.setString(1, subjecthandle_code.getSelectionModel().getSelectedItem());
+//				prepare.setString(2, subjecthandle_subject.getSelectionModel().getSelectedItem());
+//				prepare.setString(3, String.valueOf(sqlDate));
+//				prepare.setString(4, subjecthandle_status.getSelectionModel().getSelectedItem());
+//
+//				prepare.executeUpdate();
+//
+//				subjectHandleDisplayData();
+//
+//				alert.successMessage("Added successfully!");
+//
+//				subjectHandleClearBtn();
+//
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}
+//
+//	public void subjectHandleRemoveBtn() {
+//
+//		if (subjecthandle_code.getSelectionModel().getSelectedItem().isEmpty()
+//				|| subjecthandle_subject.getSelectionModel().getSelectedItem().isEmpty()
+//				|| subjecthandle_status.getSelectionModel().getSelectedItem().isEmpty()) {
+//			alert.errorMessage("Please fill all blank fields");
+//		} else {
+//
+//			if (alert.confirmMessage("Are you sure you want to Remove Subject Code: "
+//					+ subjecthandle_code.getSelectionModel().getSelectedItem() + "?")) {
+//				String deleteData = "DELETE FROM teacher_handle WHERE subject_code = '"
+//						+ subjecthandle_code.getSelectionModel().getSelectedItem() + "'";
+//				connect = Database.connectDB();
+//
+//				try {
+//					prepare = connect.prepareStatement(deleteData);
+//
+//					prepare.executeUpdate();
+//
+//					subjectHandleDisplayData();
+//
+//					alert.successMessage("Removed successfully!");
+//
+//					subjectHandleClearBtn();
+//
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			} else {
+//				alert.errorMessage("Cancelled");
+//			}
+//
+//		}
+//	}
 
-		if (subjecthandle_code.getSelectionModel().getSelectedItem().isEmpty()
+	public void subjectHandleAddBtn() {
+		if (subjecthandle_code.getSelectionModel().getSelectedItem() == null
+				|| subjecthandle_subject.getSelectionModel().getSelectedItem() == null
+				|| subjecthandle_status.getSelectionModel().getSelectedItem() == null) {
+			alert.errorMessage("Please fill all blank fields");
+		} else if (subjecthandle_code.getSelectionModel().getSelectedItem().isEmpty()
 				|| subjecthandle_subject.getSelectionModel().getSelectedItem().isEmpty()
 				|| subjecthandle_status.getSelectionModel().getSelectedItem().isEmpty()) {
 			alert.errorMessage("Please fill all blank fields");
 		} else {
-			String insertData = "INSERT INTO teacher_handle (subject_code, subject, date, status) " + "VALUES(?,?,?,?)";
+			String insertData = "INSERT INTO teacher_handle (subject_code, subject, date, status) VALUES(?,?,?,?)";
 			connect = Database.connectDB();
 
 			Date date = new Date();
@@ -438,13 +510,15 @@ public class TeacherMainFormController implements Initializable {
 	}
 
 	public void subjectHandleRemoveBtn() {
-
-		if (subjecthandle_code.getSelectionModel().getSelectedItem().isEmpty()
+		if (subjecthandle_code.getSelectionModel().getSelectedItem() == null
+				|| subjecthandle_subject.getSelectionModel().getSelectedItem() == null
+				|| subjecthandle_status.getSelectionModel().getSelectedItem() == null) {
+			alert.errorMessage("Please fill all blank fields");
+		} else if (subjecthandle_code.getSelectionModel().getSelectedItem().isEmpty()
 				|| subjecthandle_subject.getSelectionModel().getSelectedItem().isEmpty()
 				|| subjecthandle_status.getSelectionModel().getSelectedItem().isEmpty()) {
 			alert.errorMessage("Please fill all blank fields");
 		} else {
-
 			if (alert.confirmMessage("Are you sure you want to Remove Subject Code: "
 					+ subjecthandle_code.getSelectionModel().getSelectedItem() + "?")) {
 				String deleteData = "DELETE FROM teacher_handle WHERE subject_code = '"
@@ -468,7 +542,6 @@ public class TeacherMainFormController implements Initializable {
 			} else {
 				alert.errorMessage("Cancelled");
 			}
-
 		}
 	}
 
@@ -513,7 +586,7 @@ public class TeacherMainFormController implements Initializable {
 
 		subjecthandle_col_subjectCode.setCellValueFactory(new PropertyValueFactory<>("subjectCode"));
 		subjecthandle_col_subjectName.setCellValueFactory(new PropertyValueFactory<>("subject"));
-		subjecthandle_col_dateInsert.setCellValueFactory(new PropertyValueFactory<>("insertData"));
+		subjecthandle_col_dateInsert.setCellValueFactory(new PropertyValueFactory<>("insertDate"));
 		subjecthandle_col_status.setCellValueFactory(new PropertyValueFactory<>("status"));
 
 		subjecthandle_tableView.setItems(subjectHandleListData);
