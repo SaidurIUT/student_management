@@ -1,0 +1,86 @@
+CREATE TABLE users (
+	    id INT AUTO_INCREMENT PRIMARY KEY,
+	    email VARCHAR(255) NOT NULL,
+	    username VARCHAR(255) NOT NULL,
+	    password VARCHAR(255) NOT NULL,
+	    role ENUM('Admin', 'Student', 'Teacher') NOT NULL,
+	    student_id VARCHAR(255),
+	    teacher_id VARCHAR(255),
+	    date DATE NOT NULL
+);
+	
+	
+	
+SELECT date_insert, SUM(payment) FROM student WHERE status_payment = 'Paid' AND date_delete IS NULL GROUP BY TIMESTAMP(date_insert) ORDER BY TIMESTAMP(date_insert) ASC LIMIT 5
+	
+	
+SELECT DATE(date_insert), SUM(payment) FROM student WHERE status_payment = 'Paid' AND date_delete IS NULL GROUP BY DATE(date_insert) ORDER BY DATE(date_insert) ASC LIMIT 5
+	
+	
+SELECT DATE(date_insert), SUM(payment) FROM student WHERE status_payment = 'Paid' AND date_delete IS NULL GROUP BY DATE(date_insert) ORDER BY DATE(date_insert) ASC LIMIT 5
+\
+
+SELECT DATE(date_insert), COUNT(id) FROM teacher WHERE date_delete IS NULL GROUP BY DATE(date_insert) ORDER BY DATE(date_insert) ASC LIMIT 5
+
+SELECT DATE(date_insert), COUNT(id) FROM student WHERE date_delete IS NULL GROUP BY DATE(date_insert) ORDER BY DATE(date_insert) ASC LIMIT 9
+
+// create table salary(
+// id int primary key auto_increment,
+// teacher_id varchar(50),
+// name varchar(50),
+// salary_per_day double,
+// total_days int,
+// salary_paid double,
+// date_paid date
+// );
+
+
+CREATE TABLE salary(
+id INT PRIMARY KEY AUTO_INCREMENT,
+teacher_id VARCHAR(50),
+name VARCHAR(50),
+salary_per_day DOUBLE,
+total_days INT,
+salary_paid DOUBLE,
+date_paid DATE
+);
+
+
+
+CREATE TABLE subject (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    subject_code VARCHAR(50),
+    subject VARCHAR(255),
+    course VARCHAR(50),
+    date_insert DATE,
+    date_update DATE,
+    date_delete DATE,
+    status VARCHAR(50)
+);
+
+
+CREATE TABLE teacher_student (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    teacher_id VARCHAR(50),
+    stud_studentID VARCHAR(50),
+    stud_name VARCHAR(255),
+    stud_gender VARCHAR(10),
+    stud_year VARCHAR(50),
+    stud_course VARCHAR(50),
+    stud_semester VARCHAR(50),
+    date_insert DATE,
+    date_delete DATE,
+    status VARCHAR(50)
+);
+
+
+CREATE TABLE teacher_handle (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    subject_code VARCHAR(255),
+    subject VARCHAR(255),
+    date DATE,
+    status VARCHAR(50)
+);
+
+
+
