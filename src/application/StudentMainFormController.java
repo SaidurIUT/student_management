@@ -147,6 +147,45 @@ public class StudentMainFormController implements Initializable {
 	private TableView<DataSubject2Handle> subject_table_view;
 
 	@FXML
+	private TableView<DataResultHandle> result_table_view;
+
+	@FXML
+	private TableColumn<DataResultHandle, String> result_col_subject_code;
+
+	@FXML
+	private TableColumn<DataResultHandle, Float> result_col_credit;
+
+	@FXML
+	private TableColumn<DataResultHandle, Float> result_col_q1;
+
+	@FXML
+	private TableColumn<DataResultHandle, Float> result_col_q2;
+
+	@FXML
+	private TableColumn<DataResultHandle, Float> result_col_q3;
+
+	@FXML
+	private TableColumn<DataResultHandle, Float> result_col_q4;
+
+	@FXML
+	private TableColumn<DataResultHandle, Float> result_col_final;
+
+	@FXML
+	private TableColumn<DataResultHandle, Float> result_col_mid;
+
+	@FXML
+	private TableColumn<DataResultHandle, Float> result_col_attend;
+
+	@FXML
+	private TableColumn<DataResultHandle, Float> result_col_total;
+
+	@FXML
+	private TableColumn<DataResultHandle, String> result_col_grade;
+
+	@FXML
+	private TableColumn<DataResultHandle, Float> result_col_gradePoint;
+
+	@FXML
 	void studentInformationBtn(ActionEvent event) {
 
 	}
@@ -194,6 +233,8 @@ public class StudentMainFormController implements Initializable {
 			teacherInformation_pan.setVisible(false);
 			courseinfo_pan.setVisible(false);
 			result_pan.setVisible(true);
+
+			displayResultData();
 
 		}
 	}
@@ -426,6 +467,67 @@ public class StudentMainFormController implements Initializable {
 		CI_percentice.setCellValueFactory(new PropertyValueFactory<>("percentice"));
 
 		subject_table_view.setItems(subjectListData);
+	}
+
+	private ObservableList<DataResultHandle> fetchDataFromDatabase() {
+		ObservableList<DataResultHandle> resultList = FXCollections.observableArrayList();
+
+		try {
+			// Prepare SQL query to select data for a specific student
+			String sql = "SELECT ts.*, s.course, s.credit " + "FROM teacher_student ts "
+					+ "JOIN subject s ON ts.subject_code = s.subject_code " + "WHERE ts.stud_studentID = ?"; // Filter
+																												// by
+																												// student_id
+
+			// Prepare the statement
+			prepare = connect.prepareStatement(sql);
+			prepare.setLong(1, student_id1); // Set the student_id parameter
+
+			// Execute query and get result set
+			result = prepare.executeQuery();
+
+			// Process result set
+			while (result.next()) {
+				// Extract data from result set
+				String subjectCode = result.getString("subject_code");
+				float credit = result.getFloat("credit");
+				float quiz1 = result.getFloat("mark_quiz_1");
+				float quiz2 = result.getFloat("mark_quiz_2");
+				float quiz3 = result.getFloat("mark_quiz_3");
+				float quiz4 = result.getFloat("mark_quiz_4");
+				float finalExam = result.getFloat("mark_final");
+				float midTerm = result.getFloat("mark_mid_term");
+				float attendancePercentage = result.getFloat("attendance_percentage");
+
+				// Create DataResultHandle object and add to result list
+				DataResultHandle dataResultHandle = new DataResultHandle(subjectCode, credit, quiz1, quiz2, quiz3,
+						quiz4, finalExam, midTerm, attendancePercentage);
+				resultList.add(dataResultHandle);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return resultList;
+	}
+
+	public void displayResultData() {
+		ObservableList<DataResultHandle> resultList = fetchDataFromDatabase();
+
+		result_col_subject_code.setCellValueFactory(new PropertyValueFactory<>("subjectCode"));
+		result_col_credit.setCellValueFactory(new PropertyValueFactory<>("credit"));
+		result_col_q1.setCellValueFactory(new PropertyValueFactory<>("quiz1"));
+		result_col_q2.setCellValueFactory(new PropertyValueFactory<>("quiz2"));
+		result_col_q3.setCellValueFactory(new PropertyValueFactory<>("quiz3"));
+		result_col_q4.setCellValueFactory(new PropertyValueFactory<>("quiz4"));
+		result_col_final.setCellValueFactory(new PropertyValueFactory<>("finalExam"));
+		result_col_mid.setCellValueFactory(new PropertyValueFactory<>("midTerm"));
+		result_col_attend.setCellValueFactory(new PropertyValueFactory<>("attendance"));
+		result_col_total.setCellValueFactory(new PropertyValueFactory<>("total"));
+		result_col_grade.setCellValueFactory(new PropertyValueFactory<>("grade"));
+		result_col_gradePoint.setCellValueFactory(new PropertyValueFactory<>("gradePoint"));
+
+		result_table_view.setItems(resultList);
 	}
 
 	@Override

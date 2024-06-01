@@ -63,7 +63,7 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="studentInformation_pan" layoutX="1.0" prefHeight="562.0" prefWidth="881.0" visible="false">
+                        <AnchorPane fx:id="studentInformation_pan" layoutX="1.0" prefHeight="562.0" prefWidth="881.0">
                            <children>
                               <GridPane layoutX="42.0" layoutY="18.0" prefHeight="505.0" prefWidth="786.0">
                                 <columnConstraints>
@@ -187,7 +187,7 @@
                               </GridPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="courseinfo_pan" layoutX="-1.0" prefHeight="559.0" prefWidth="883.0">
+                        <AnchorPane fx:id="courseinfo_pan" layoutX="-1.0" prefHeight="559.0" prefWidth="883.0" visible="false">
                            <children>
                               <TableView fx:id="subject_table_view" layoutX="1.0" layoutY="49.0" onMouseClicked="#teacherSelectData" prefHeight="511.0" prefWidth="882.0">
                                  <columns>
@@ -257,9 +257,41 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="result_pan" layoutX="9.0" layoutY="10.0" prefHeight="559.0" prefWidth="883.0" visible="false">
+                        <AnchorPane fx:id="result_pan" layoutX="9.0" layoutY="10.0" prefHeight="569.0" prefWidth="892.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Text fx:id="just_a_text" layoutX="364.0" layoutY="244.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Result" />
+                              <AnchorPane prefHeight="562.0" prefWidth="883.0" stylesheets="@../Design/MainForm.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <styleClass>
+                                    <String fx:value="white-bg" />
+                                    <String fx:value="shadow" />
+                                    <String fx:value="radius" />
+                                 </styleClass>
+                                 <children>
+                                    <TableView fx:id="result_table_view" layoutX="14.0" layoutY="64.0" onMouseClicked="#teacherSelectData" prefHeight="446.0" prefWidth="482.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="64.0">
+                                       <columns>
+                                          <TableColumn fx:id="result_col_subject_code" prefWidth="96.0" text="Subject Code" />
+                                          <TableColumn fx:id="result_col_credit" prefWidth="81.0" text="Credit" />
+                                          <TableColumn fx:id="result_col_q1" prefWidth="73.0" text="Quiz 1" />
+                                          <TableColumn fx:id="result_col_q2" prefWidth="103.0" text="Quiz 2" />
+                                          <TableColumn fx:id="result_col_q3" prefWidth="99.0" text="Quiz 3" />
+                                          <TableColumn fx:id="result_col_q4" prefWidth="99.0" text="Quiz 4" />
+                                          <TableColumn fx:id="result_col_attend" prefWidth="99.0" text="Attendence" />
+                                          <TableColumn fx:id="result_col_mid" prefWidth="99.0" text="MId term exam" />
+                                          <TableColumn fx:id="result_col_final" prefWidth="99.0" text="FInal Exam" />
+                                          <TableColumn fx:id="result_col_total" prefWidth="99.0" text="Total Mark" />
+                                          <TableColumn fx:id="result_col_grade" prefWidth="99.0" text="Grade" />
+                                          <TableColumn fx:id="result_col_gradePoint" prefWidth="99.0" text="Grade Point" />
+                                       </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                    <Label layoutX="14.0" layoutY="14.0" text="Your Results">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
                            </children>
                         </AnchorPane>
                      </children>
