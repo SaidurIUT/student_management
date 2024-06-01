@@ -4,6 +4,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +47,12 @@ public class TeacherMainFormController implements Initializable {
 
 	@FXML
 	private Button logout_btn;
+
+	@FXML
+	private Button attendance_btn;
+
+	@FXML
+	private Button mark_btn;
 
 	@FXML
 	private Label current_form;
@@ -151,6 +158,49 @@ public class TeacherMainFormController implements Initializable {
 
 	@FXML
 	private TableColumn<DataSubjectHandle, String> subjecthandle_col_status;
+
+	@FXML
+	private AnchorPane attendance_form;
+
+	// add attendance form attributes here
+
+	@FXML
+	private Button take_attendance_btn;
+
+	@FXML
+	private Button attendance_present_btn;
+
+	@FXML
+	private Button attendance_absent_btn;
+
+	@FXML
+	private Label attendance_sID;
+
+	@FXML
+	private ComboBox<String> attendance_course;
+
+	@FXML
+	private TableView<DataAttendanceHandle> attendance_table_view;
+
+	@FXML
+	private TableColumn<DataAttendanceHandle, String> attendance_col_studentID;
+
+	@FXML
+	private TableColumn<DataAttendanceHandle, String> attendance_col_name;
+
+	@FXML
+	private TableColumn<DataAttendanceHandle, Integer> attendance_col_total_class;
+
+	@FXML
+	private TableColumn<DataAttendanceHandle, Integer> attendance_col_attended;
+
+	@FXML
+	private TableColumn<DataAttendanceHandle, Float> attendance_col_percentice;
+
+	@FXML
+	private AnchorPane mark_form;
+
+	// add mark form attributes here
 
 	private Connection connect;
 	private PreparedStatement prepare;
@@ -704,6 +754,8 @@ public class TeacherMainFormController implements Initializable {
 		if (event.getSource() == addStudent_btn) {
 			addStudents_form.setVisible(true);
 			subjectHandle_form.setVisible(false);
+			attendance_form.setVisible(false);
+			mark_form.setVisible(false);
 
 			addStudentCourseList();
 			addStudentsYearList();
@@ -713,12 +765,30 @@ public class TeacherMainFormController implements Initializable {
 		} else if (event.getSource() == subjectHandle_btn) {
 			addStudents_form.setVisible(false);
 			subjectHandle_form.setVisible(true);
+			attendance_form.setVisible(false);
+			mark_form.setVisible(false);
 
 			subjectHandleSubjectCodeList();
 			subjectHandleStatusList();
 			subjectHandleDisplayData();
 
 			current_form.setText("Subject Handles form");
+		} else if (event.getSource() == attendance_btn) {
+			addStudents_form.setVisible(false);
+			subjectHandle_form.setVisible(false);
+			attendance_form.setVisible(true);
+			mark_form.setVisible(false);
+
+			loadAttendanceCourses();
+
+			current_form.setText("Attendance form");
+		} else if (event.getSource() == mark_btn) {
+			addStudents_form.setVisible(false);
+			subjectHandle_form.setVisible(false);
+			attendance_form.setVisible(false);
+			mark_form.setVisible(true);
+
+			current_form.setText("Mark form");
 		}
 
 	}
@@ -774,6 +844,37 @@ public class TeacherMainFormController implements Initializable {
 			e.printStackTrace();
 		}
 
+	}
+
+	private void loadAttendanceCourses() {
+		ObservableList<String> courses = FXCollections.observableArrayList();
+
+		String sql = "SELECT DISTINCT subject_code FROM teacher_student WHERE teacher_id = ?";
+		try {
+			connect = Database.connectDB();
+			prepare = connect.prepareStatement(sql);
+			prepare.setString(1, teacher_id.getText());
+			result = prepare.executeQuery();
+
+			while (result.next()) {
+				courses.add(result.getString("subject_code"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (result != null)
+					result.close();
+				if (prepare != null)
+					prepare.close();
+				if (connect != null)
+					connect.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		attendance_course.setItems(courses);
 	}
 
 	@Override
