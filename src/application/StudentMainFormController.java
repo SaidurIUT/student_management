@@ -84,16 +84,16 @@ public class StudentMainFormController implements Initializable {
 	private Label studentinfo_studentfullname;
 
 	@FXML
-	private TableColumn<?, ?> teacherInfo_col_teacherGender;
+	private TableColumn<DataStudentHandle, String> teacherInfo_col_teacherGender;
 
 	@FXML
-	private TableColumn<?, ?> teacherInfo_col_teacherID;
+	private TableColumn<DataStudentHandle, String> teacherInfo_col_teacherID;
 
 	@FXML
-	private TableColumn<?, ?> teacherInfo_col_teacherName;
+	private TableColumn<DataStudentHandle, String> teacherInfo_col_teacherName;
 
 	@FXML
-	private TableColumn<?, ?> teacherInfo_col_teacherYE;
+	private TableColumn<DataStudentHandle, java.sql.Date> teacherInfo_col_teacherYE;
 
 	@FXML
 	private Button teacherInformation_btn;
@@ -114,7 +114,7 @@ public class StudentMainFormController implements Initializable {
 	private Label teacher_name;
 
 	@FXML
-	private TableView<?> teacher_table_view;
+	private TableView<DataStudentHandle> teacher_table_view;
 
 	@FXML
 	private AnchorPane courseinfo_pan;
@@ -145,7 +145,6 @@ public class StudentMainFormController implements Initializable {
 			teacherInformation_pan.setVisible(false);
 			courseinfo_pan.setVisible(false);
 			result_pan.setVisible(false);
-			// System.out.println("Student Information");
 
 		} else if (event.getSource() == teacherInformation_btn) {
 
@@ -153,7 +152,8 @@ public class StudentMainFormController implements Initializable {
 			teacherInformation_pan.setVisible(true);
 			courseinfo_pan.setVisible(false);
 			result_pan.setVisible(false);
-			// System.out.println("Teacher Information");
+
+			teacherDisplayData();
 
 		} else if (event.getSource() == courseInformation_btn) {
 
@@ -161,7 +161,6 @@ public class StudentMainFormController implements Initializable {
 			teacherInformation_pan.setVisible(false);
 			courseinfo_pan.setVisible(true);
 			result_pan.setVisible(false);
-			// System.out.println("Course Information");
 
 		} else if (event.getSource() == resultInformation_btn) {
 
@@ -169,38 +168,60 @@ public class StudentMainFormController implements Initializable {
 			teacherInformation_pan.setVisible(false);
 			courseinfo_pan.setVisible(false);
 			result_pan.setVisible(true);
-			// System.out.println("Result Information");
 
 		}
 	}
 
 	AlertMessage alert = new AlertMessage();
 
-	public ObservableList<DataStudentHandle> teacherSetData() {
+//	public ObservableList<DataStudentHandle> teacherSetData() {
+//
+//		ObservableList<DataStudentHandle> listData = FXCollections.observableArrayList();
+//
+//		String sql = "SELECT * FROM teacher_student WHERE stud_studentID = '" + student_id.getText()
+//				+ "' AND date_delete IS NULL";
+//
+//		connect = Database.connectDB();
+//
+//		try {
+//
+//			prepare = connect.prepareStatement(sql);
+//			result = prepare.executeQuery();
+//
+//			DataStudentHandle dsh;
+//
+//			while (result.next()) {
+//				dsh = new DataStudentHandle(result.getString("teacher_id"), result.getString("stud_studentID"),
+//						result.getString("stud_name"), result.getString("stud_gender"), result.getDate("date_insert"));
+//				listData.add(dsh);
+//			}
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return listData;
+//	}
 
+	public ObservableList<DataStudentHandle> teacherSetData() {
 		ObservableList<DataStudentHandle> listData = FXCollections.observableArrayList();
 
-		String sql = "SELECT * FROM teacher_student WHERE stud_studentID = '" + student_id.getText()
-				+ "' AND date_delete IS NULL";
+		String sql = "SELECT ts.teacher_id, ts.stud_studentID, ts.stud_name, ts.stud_gender, ts.date_insert, t.full_name, t.gender "
+				+ "FROM teacher_student ts " + "JOIN teacher t ON ts.teacher_id = t.teacher_id "
+				+ "WHERE ts.stud_studentID = ? AND ts.date_delete IS NULL";
 
 		connect = Database.connectDB();
 
 		try {
-
 			prepare = connect.prepareStatement(sql);
+			prepare.setString(1, student_id.getText());
 			result = prepare.executeQuery();
 
-			DataStudentHandle dsh;
-
 			while (result.next()) {
-//                DataStudentHandle(String teacherID, String studentID
-//            , String name, String gender, Date dateInsert)
-
-				dsh = new DataStudentHandle(result.getString("teacher_id"), result.getString("stud_studentID"),
-						result.getString("stud_name"), result.getString("stud_gender"), result.getDate("date_insert"));
+				DataStudentHandle dsh = new DataStudentHandle(result.getString("teacher_id"),
+						result.getString("stud_studentID"), result.getString("full_name"), result.getString("gender"),
+						result.getDate("date_insert"));
 				listData.add(dsh);
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -342,7 +363,7 @@ public class StudentMainFormController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		teacherDisplayData();
+//        teacherDisplayData();
 		studentIDDisplay();
 		showStudentInforamtion();
 
