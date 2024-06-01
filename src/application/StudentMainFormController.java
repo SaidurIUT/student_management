@@ -20,7 +20,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
@@ -114,6 +117,12 @@ public class StudentMainFormController implements Initializable {
 	private TableView<?> teacher_table_view;
 
 	@FXML
+	private AnchorPane courseinfo_pan;
+
+	@FXML
+	private AnchorPane result_pan;
+
+	@FXML
 	void studentInformationBtn(ActionEvent event) {
 
 	}
@@ -127,6 +136,43 @@ public class StudentMainFormController implements Initializable {
 	private PreparedStatement prepare;
 	private Statement statement;
 	private ResultSet result;
+
+	public void switchForm(ActionEvent event) {
+
+		if (event.getSource() == studentInformation_btn) {
+
+			studentInformation_pan.setVisible(true);
+			teacherInformation_pan.setVisible(false);
+			courseinfo_pan.setVisible(false);
+			result_pan.setVisible(false);
+			// System.out.println("Student Information");
+
+		} else if (event.getSource() == teacherInformation_btn) {
+
+			studentInformation_pan.setVisible(false);
+			teacherInformation_pan.setVisible(true);
+			courseinfo_pan.setVisible(false);
+			result_pan.setVisible(false);
+			// System.out.println("Teacher Information");
+
+		} else if (event.getSource() == courseInformation_btn) {
+
+			studentInformation_pan.setVisible(false);
+			teacherInformation_pan.setVisible(false);
+			courseinfo_pan.setVisible(true);
+			result_pan.setVisible(false);
+			// System.out.println("Course Information");
+
+		} else if (event.getSource() == resultInformation_btn) {
+
+			studentInformation_pan.setVisible(false);
+			teacherInformation_pan.setVisible(false);
+			courseinfo_pan.setVisible(false);
+			result_pan.setVisible(true);
+			// System.out.println("Result Information");
+
+		}
+	}
 
 	AlertMessage alert = new AlertMessage();
 
@@ -160,60 +206,6 @@ public class StudentMainFormController implements Initializable {
 		}
 		return listData;
 	}
-
-	private ObservableList<DataStudentHandle> teacherListData;
-
-//	public void teacherDisplayData() {
-//		teacherListData = teacherSetData();
-//
-//		studentInfo_col_teacherID.setCellValueFactory(new PropertyValueFactory<>("teacherID"));
-//		studentInfo_col_name.setCellValueFactory(new PropertyValueFactory<>("name"));
-//		studentInfo_col_gender.setCellValueFactory(new PropertyValueFactory<>("gender"));
-//		studentInfo_col_YE.setCellValueFactory(new PropertyValueFactory<>("dateInsert"));
-//
-//		table_view.setItems(teacherListData);
-//	}
-
-//	private Image image;
-//
-//	public void teacherSelectData() {
-//		DataStudentHandle dsh = table_view.getSelectionModel().getSelectedItem();
-//		int num = table_view.getSelectionModel().getSelectedIndex();
-//
-//		if ((num - 1) < -1) {
-//			return;
-//		}
-//
-//		String sql = "SELECT * FROM teacher WHERE teacher_id = '" + dsh.getTeacherID() + "'";
-//
-//		connect = Database.connectDB();
-//
-//		try {
-//			prepare = connect.prepareStatement(sql);
-//			result = prepare.executeQuery();
-//
-//			if (result.next()) {
-//
-//				String path = "File:" + result.getString("image");
-//
-//				image = new Image(path, 164, 73, false, true);
-//				circle_image.setFill(new ImagePattern(image));
-//
-//				teacher_id.setText(result.getString("teacher_id"));
-//				teacher_name.setText(result.getString("full_name"));
-//				teacher_gender.setText(result.getString("gender"));
-//				teacher_date.setText(result.getString("date_insert"));
-//			}
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//
-//	}
-
-	public void teacherSelectData() {
-
-	};
 
 	private long student_id1;
 	private String student_email;
@@ -278,6 +270,55 @@ public class StudentMainFormController implements Initializable {
 
 	}
 
+	private ObservableList<DataStudentHandle> teacherListData;
+
+	public void teacherDisplayData() {
+		teacherListData = teacherSetData();
+
+		teacherInfo_col_teacherID.setCellValueFactory(new PropertyValueFactory<>("teacherID"));
+		teacherInfo_col_teacherName.setCellValueFactory(new PropertyValueFactory<>("name"));
+		teacherInfo_col_teacherGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
+		teacherInfo_col_teacherYE.setCellValueFactory(new PropertyValueFactory<>("dateInsert"));
+
+		teacher_table_view.setItems(teacherListData);
+	}
+
+	private Image image;
+
+	public void teacherSelectData() {
+		DataStudentHandle dsh = teacher_table_view.getSelectionModel().getSelectedItem();
+		int num = teacher_table_view.getSelectionModel().getSelectedIndex();
+
+		if ((num - 1) < -1) {
+			return;
+		}
+
+		String sql = "SELECT * FROM teacher WHERE teacher_id = '" + dsh.getTeacherID() + "'";
+
+		connect = Database.connectDB();
+
+		try {
+			prepare = connect.prepareStatement(sql);
+			result = prepare.executeQuery();
+
+			if (result.next()) {
+
+				String path = "File:" + result.getString("image");
+
+				image = new Image(path, 164, 73, false, true);
+				circle_image.setFill(new ImagePattern(image));
+
+				teacher_id.setText(result.getString("teacher_id"));
+				teacher_name.setText(result.getString("full_name"));
+				teacher_gender.setText(result.getString("gender"));
+				teacher_date.setText(result.getString("date_insert"));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void logoutBtn() {
 
 		try {
@@ -301,7 +342,7 @@ public class StudentMainFormController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		// teacherDisplayData();
+		teacherDisplayData();
 		studentIDDisplay();
 		showStudentInforamtion();
 
