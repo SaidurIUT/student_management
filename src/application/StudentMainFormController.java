@@ -96,6 +96,27 @@ public class StudentMainFormController implements Initializable {
 	private TableColumn<DataStudentHandle, java.sql.Date> teacherInfo_col_teacherYE;
 
 	@FXML
+	private TableColumn<DataSubject2Handle, String> CI_subject_code;
+
+	@FXML
+	private TableColumn<DataSubject2Handle, String> CI_subject_name;
+
+	@FXML
+	private TableColumn<DataSubject2Handle, String> CI_subject_teacher;
+
+	@FXML
+	private TableColumn<DataSubject2Handle, Float> CI_credit;
+
+	@FXML
+	private TableColumn<DataSubject2Handle, Integer> CI_total_class;
+
+	@FXML
+	private TableColumn<DataSubject2Handle, Integer> CI_attended_class;
+
+	@FXML
+	private TableColumn<DataSubject2Handle, Integer> CI_percentice;
+
+	@FXML
 	private Button teacherInformation_btn;
 
 	@FXML
@@ -121,6 +142,9 @@ public class StudentMainFormController implements Initializable {
 
 	@FXML
 	private AnchorPane result_pan;
+
+	@FXML
+	private TableView<DataSubject2Handle> subject_table_view;
 
 	@FXML
 	void studentInformationBtn(ActionEvent event) {
@@ -161,6 +185,8 @@ public class StudentMainFormController implements Initializable {
 			teacherInformation_pan.setVisible(false);
 			courseinfo_pan.setVisible(true);
 			result_pan.setVisible(false);
+
+			displaySubjectData();
 
 		} else if (event.getSource() == resultInformation_btn) {
 
@@ -358,6 +384,48 @@ public class StudentMainFormController implements Initializable {
 			e.printStackTrace();
 		}
 
+	}
+
+	public ObservableList<DataSubject2Handle> subjectSetData() {
+		ObservableList<DataSubject2Handle> listData = FXCollections.observableArrayList();
+
+		String sql = "SELECT ts.subject_code, ts.total_classes, ts.total_attendance, ts.attendance_percentage, s.subject, s.credit, t.full_name AS teacher_name "
+				+ "FROM teacher_student ts " + "JOIN subject s ON ts.subject_code = s.subject_code "
+				+ "JOIN teacher t ON ts.teacher_id = t.teacher_id "
+				+ "WHERE ts.stud_studentID = ? AND ts.date_delete IS NULL";
+
+		connect = Database.connectDB();
+
+		try {
+			prepare = connect.prepareStatement(sql);
+			prepare.setString(1, String.valueOf(student_id1));
+			result = prepare.executeQuery();
+
+			while (result.next()) {
+				DataSubject2Handle dsh = new DataSubject2Handle(result.getString("subject_code"),
+						result.getString("subject"), result.getString("teacher_name"), result.getFloat("credit"),
+						result.getInt("total_classes"), result.getInt("total_attendance"),
+						result.getFloat("attendance_percentage"));
+				listData.add(dsh);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listData;
+	}
+
+	public void displaySubjectData() {
+		ObservableList<DataSubject2Handle> subjectListData = subjectSetData();
+
+		CI_subject_code.setCellValueFactory(new PropertyValueFactory<>("subjectCode"));
+		CI_subject_name.setCellValueFactory(new PropertyValueFactory<>("subjectName"));
+		CI_subject_teacher.setCellValueFactory(new PropertyValueFactory<>("subjectTeacher"));
+		CI_credit.setCellValueFactory(new PropertyValueFactory<>("credit"));
+		CI_total_class.setCellValueFactory(new PropertyValueFactory<>("totalClass"));
+		CI_attended_class.setCellValueFactory(new PropertyValueFactory<>("attendedClass"));
+		CI_percentice.setCellValueFactory(new PropertyValueFactory<>("percentice"));
+
+		subject_table_view.setItems(subjectListData);
 	}
 
 	@Override

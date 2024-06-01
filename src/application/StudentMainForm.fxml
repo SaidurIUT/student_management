@@ -54,7 +54,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="POWER_OFF" layoutX="47.0" layoutY="548.0" />
                         <Label layoutX="21.0" layoutY="58.0" text="Hello" textFill="WHITE" />
                         <Label fx:id="student_name" layoutX="63.0" layoutY="58.0" prefHeight="17.0" prefWidth="133.0" text="student name" textFill="WHITE" />
-                        <Button fx:id="courseInformation_btn" layoutX="7.0" layoutY="212.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../Design/MainForm.css" text="Course Information" />
+                        <Button fx:id="courseInformation_btn" layoutX="7.0" layoutY="212.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../Design/MainForm.css" text="Subject Information" />
                         <Button fx:id="teacherInformation_btn" layoutX="7.0" layoutY="261.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../Design/MainForm.css" text="Teacher Information" />
                         <Button fx:id="resultInformation_btn" layoutX="7.0" layoutY="308.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../Design/MainForm.css" text="Result" />
                      </children>
@@ -63,7 +63,7 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="studentInformation_pan" layoutX="1.0" prefHeight="562.0" prefWidth="881.0">
+                        <AnchorPane fx:id="studentInformation_pan" layoutX="1.0" prefHeight="562.0" prefWidth="881.0" visible="false">
                            <children>
                               <GridPane layoutX="42.0" layoutY="18.0" prefHeight="505.0" prefWidth="786.0">
                                 <columnConstraints>
@@ -187,9 +187,27 @@
                               </GridPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="courseinfo_pan" layoutX="-1.0" prefHeight="559.0" prefWidth="883.0" visible="false">
+                        <AnchorPane fx:id="courseinfo_pan" layoutX="-1.0" prefHeight="559.0" prefWidth="883.0">
                            <children>
-                              <Text layoutX="364.0" layoutY="244.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Course INfo" />
+                              <TableView fx:id="subject_table_view" layoutX="1.0" layoutY="49.0" onMouseClicked="#teacherSelectData" prefHeight="511.0" prefWidth="882.0">
+                                 <columns>
+                                    <TableColumn fx:id="CI_subject_code" prefWidth="99.0" text="Subject Code" />
+                                    <TableColumn fx:id="CI_subject_name" prefWidth="152.0" text="Subject Name" />
+                                    <TableColumn fx:id="CI_subject_teacher" prefWidth="147.0" text="Subject Teacher" />
+                                    <TableColumn fx:id="CI_credit" prefWidth="111.0" text="Credit" />
+                                    <TableColumn fx:id="CI_total_class" prefWidth="111.0" text="Total Class" />
+                                    <TableColumn fx:id="CI_attended_class" prefWidth="113.0" text="Attended Class" />
+                                    <TableColumn fx:id="CI_percentice" prefWidth="167.0" text="Attendance Percentage" />
+                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <Text layoutX="342.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Subject Information">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                              </Text>
                            </children>
                         </AnchorPane>
                         <AnchorPane fx:id="teacherInformation_pan" layoutX="1.0" layoutY="-1.0" prefHeight="562.0" prefWidth="881.0" visible="false">
