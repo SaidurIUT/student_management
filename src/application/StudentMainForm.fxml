@@ -51,7 +51,7 @@
                            <graphic>
                            </graphic>
                         </Button>
-                        <FontAwesomeIconView fill="WHITE" glyphName="POWER_OFF" layoutX="47.0" layoutY="548.0" />
+                        <FontAwesomeIconView fill="WHITE" glyphName="POWER_OFF" layoutX="47.0" layoutY="542.0" />
                         <Label layoutX="21.0" layoutY="58.0" text="Hello" textFill="WHITE" />
                         <Label fx:id="student_name" layoutX="63.0" layoutY="58.0" prefHeight="17.0" prefWidth="133.0" text="student name" textFill="WHITE" />
                         <Button fx:id="courseInformation_btn" layoutX="7.0" layoutY="212.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" stylesheets="@../Design/MainForm.css" text="Subject Information" />
