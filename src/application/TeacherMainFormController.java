@@ -209,6 +209,50 @@ public class TeacherMainFormController implements Initializable {
 
 	private AlertMessage alert = new AlertMessage();
 
+	public void switchForm(ActionEvent event) {
+
+		if (event.getSource() == addStudent_btn) {
+			addStudents_form.setVisible(true);
+			subjectHandle_form.setVisible(false);
+			attendance_form.setVisible(false);
+			mark_form.setVisible(false);
+
+			addStudentCourseList();
+			addStudentsYearList();
+			addStudentDisplayData();
+
+			current_form.setText("Add Students form");
+		} else if (event.getSource() == subjectHandle_btn) {
+			addStudents_form.setVisible(false);
+			subjectHandle_form.setVisible(true);
+			attendance_form.setVisible(false);
+			mark_form.setVisible(false);
+
+			subjectHandleSubjectCodeList();
+			subjectHandleStatusList();
+			subjectHandleDisplayData();
+
+			current_form.setText("Subject Handles form");
+		} else if (event.getSource() == attendance_btn) {
+			addStudents_form.setVisible(false);
+			subjectHandle_form.setVisible(false);
+			attendance_form.setVisible(true);
+			mark_form.setVisible(false);
+
+			loadAttendanceCourses();
+
+			current_form.setText("Attendance form");
+		} else if (event.getSource() == mark_btn) {
+			addStudents_form.setVisible(false);
+			subjectHandle_form.setVisible(false);
+			attendance_form.setVisible(false);
+			mark_form.setVisible(true);
+
+			current_form.setText("Mark form");
+		}
+
+	}
+
 	public void addStudentsAddBtn() {
 
 		if (addStudents_course.getSelectionModel().getSelectedItem().isEmpty()
@@ -749,50 +793,6 @@ public class TeacherMainFormController implements Initializable {
 
 	}
 
-	public void switchForm(ActionEvent event) {
-
-		if (event.getSource() == addStudent_btn) {
-			addStudents_form.setVisible(true);
-			subjectHandle_form.setVisible(false);
-			attendance_form.setVisible(false);
-			mark_form.setVisible(false);
-
-			addStudentCourseList();
-			addStudentsYearList();
-			addStudentDisplayData();
-
-			current_form.setText("Add Students form");
-		} else if (event.getSource() == subjectHandle_btn) {
-			addStudents_form.setVisible(false);
-			subjectHandle_form.setVisible(true);
-			attendance_form.setVisible(false);
-			mark_form.setVisible(false);
-
-			subjectHandleSubjectCodeList();
-			subjectHandleStatusList();
-			subjectHandleDisplayData();
-
-			current_form.setText("Subject Handles form");
-		} else if (event.getSource() == attendance_btn) {
-			addStudents_form.setVisible(false);
-			subjectHandle_form.setVisible(false);
-			attendance_form.setVisible(true);
-			mark_form.setVisible(false);
-
-			loadAttendanceCourses();
-
-			current_form.setText("Attendance form");
-		} else if (event.getSource() == mark_btn) {
-			addStudents_form.setVisible(false);
-			subjectHandle_form.setVisible(false);
-			attendance_form.setVisible(false);
-			mark_form.setVisible(true);
-
-			current_form.setText("Mark form");
-		}
-
-	}
-
 	public void logoutBtn() {
 		try {
 			if (alert.confirmMessage("Are you sure you want to logout?")) {
@@ -846,7 +846,7 @@ public class TeacherMainFormController implements Initializable {
 
 	}
 
-	private void loadAttendanceCourses() {
+	public void loadAttendanceCourses() {
 		ObservableList<String> courses = FXCollections.observableArrayList();
 
 		String sql = "SELECT DISTINCT subject_code FROM teacher_student WHERE teacher_id = ?";
@@ -859,33 +859,113 @@ public class TeacherMainFormController implements Initializable {
 			while (result.next()) {
 				courses.add(result.getString("subject_code"));
 			}
+
+			attendance_course.setItems(courses);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void updateAttendanceTableView(String selectedCourse) {
+		ObservableList<DataAttendanceHandle> attendanceData = getAttendanceData(selectedCourse);
+		attendance_table_view.setItems(attendanceData);
+	}
+
+	private ObservableList<DataAttendanceHandle> getAttendanceData(String selectedCourse) {
+		ObservableList<DataAttendanceHandle> attendanceData = FXCollections.observableArrayList();
+
+		String sql = "SELECT * FROM teacher_student WHERE teacher_id = ? AND stud_course = ?";
+		try {
+			connect = Database.connectDB();
+			prepare = connect.prepareStatement(sql);
+			prepare.setString(1, teacher_id.getText());
+			prepare.setString(2, selectedCourse);
+			result = prepare.executeQuery();
+
+			while (result.next()) {
+
+				DataAttendanceHandle attendance = new DataAttendanceHandle(result.getString("stud_studentID"),
+						result.getString("stud_name"), result.getInt("total_classes"),
+						result.getInt("total_attendance"), calculateAttendancePercentage(
+								result.getInt("total_attendance"), result.getInt("total_classes")));
+				attendanceData.add(attendance);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
+			// Close resources
+		}
+
+		return attendanceData;
+	}
+
+	private float calculateAttendancePercentage(int attended, int total) {
+		return (float) attended / total * 100;
+	}
+
+	public void loadAttendanceData() {
+		ObservableList<DataAttendanceHandle> attendanceData = FXCollections.observableArrayList();
+		String sql = "SELECT * FROM teacher_student WHERE subject_code = ? AND teacher_id = ?";
+
+		try {
+			connect = Database.connectDB();
+			prepare = connect.prepareStatement(sql);
+			prepare.setString(1, attendance_course.getSelectionModel().getSelectedItem());
+			prepare.setString(2, teacher_id.getText());
+			result = prepare.executeQuery();
+
+			while (result.next()) {
+				DataAttendanceHandle data = new DataAttendanceHandle(result.getString("stud_studentID"),
+						result.getString("stud_name"), result.getInt("total_classes"),
+						result.getInt("total_attendance"), calculateAttendancePercentage(
+								result.getInt("total_attendance"), result.getInt("total_classes")));
+				attendanceData.add(data);
+			}
+
+			attendance_col_studentID.setCellValueFactory(new PropertyValueFactory<>("studentID"));
+			attendance_col_name.setCellValueFactory(new PropertyValueFactory<>("name"));
+			attendance_col_total_class.setCellValueFactory(new PropertyValueFactory<>("totalClasses"));
+			attendance_col_attended.setCellValueFactory(new PropertyValueFactory<>("attendedClasses"));
+			attendance_col_percentice.setCellValueFactory(new PropertyValueFactory<>("attendancePercentage"));
+
+			attendance_table_view.setItems(attendanceData);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void takeAttendence(ActionEvent event) {
+		if (attendance_course.getSelectionModel().isEmpty()) {
+			alert.errorMessage("Please select a course to take attendance for.");
+		} else {
+			// update the database teacher_student table with total_classes = total_classes
+			// + 1;
+			String sql = "UPDATE teacher_student SET total_classes = total_classes + 1 WHERE subject_code = ? AND teacher_id = ?";
 			try {
-				if (result != null)
-					result.close();
-				if (prepare != null)
-					prepare.close();
-				if (connect != null)
-					connect.close();
+				connect = Database.connectDB();
+				prepare = connect.prepareStatement(sql);
+				prepare.setString(1, attendance_course.getSelectionModel().getSelectedItem());
+				prepare.setString(2, teacher_id.getText());
+				prepare.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			loadAttendanceData();
 		}
-
-		attendance_course.setItems(courses);
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
 		displayTeacher();
 
 		addStudentCourseList();
 		addStudentsYearList();
 		addStudentDisplayData();
 		addStudentSubjectList();
+		loadAttendanceCourses();
+		attendance_course.setOnAction(event -> loadAttendanceData());
 
 	}
 
