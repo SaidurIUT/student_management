@@ -1,6 +1,8 @@
 package application;
 
 public class DataResultHandle {
+	private String studentID;
+	private String studentName;
 	private String subjectCode;
 	private float credit;
 	private float quiz1;
@@ -28,6 +30,26 @@ public class DataResultHandle {
 		this.attendancePercentage = attendancePercentage;
 		this.attendance = calculateAttendance(attendancePercentage, credit);
 		calculateTotalGradeAndGradePoint();
+	}
+
+	public DataResultHandle(String studentID, String studentName, float quiz1, float quiz2, float quiz3, float quiz4,
+			float finalExam, float midTerm) {
+		this.studentID = studentID;
+		this.studentName = studentName;
+		this.quiz1 = quiz1;
+		this.quiz2 = quiz2;
+		this.quiz3 = quiz3;
+		this.quiz4 = quiz4;
+		this.finalExam = finalExam;
+		this.midTerm = midTerm;
+	}
+
+	public String getStudentID() {
+		return studentID;
+	}
+
+	public String getStudentName() {
+		return studentName;
 	}
 
 	public String getSubjectCode() {

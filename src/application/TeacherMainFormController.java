@@ -24,6 +24,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -200,7 +201,59 @@ public class TeacherMainFormController implements Initializable {
 	@FXML
 	private AnchorPane mark_form;
 
-	// add mark form attributes here
+	@FXML
+	private Button marks_update_btn;
+
+	@FXML
+	private ComboBox<String> marks_course;
+
+	@FXML
+	private Label marks_sID;
+
+	@FXML
+	private TextField tf_q1;
+
+	@FXML
+	private TextField tf_q2;
+
+	@FXML
+	private TextField tf_q3;
+
+	@FXML
+	private TextField tf_q4;
+
+	@FXML
+	private TextField tf_final;
+
+	@FXML
+	private TextField tf_mid;
+
+	@FXML
+	private TableView<DataResultHandle> marks_table_view;
+
+	@FXML
+	private TableColumn<DataResultHandle, String> marks_col_sID;
+
+	@FXML
+	private TableColumn<DataResultHandle, String> marks_col_name;
+
+	@FXML
+	private TableColumn<DataResultHandle, Integer> marks_col_q1;
+
+	@FXML
+	private TableColumn<DataResultHandle, Float> marks_col_q2;
+
+	@FXML
+	private TableColumn<DataResultHandle, Float> marks_col_q3;
+
+	@FXML
+	private TableColumn<DataResultHandle, Float> marks_col_q4;
+
+	@FXML
+	private TableColumn<DataResultHandle, Float> marks_col_mid;
+
+	@FXML
+	private TableColumn<DataResultHandle, Float> marks_col_final;
 
 	private Connection connect;
 	private PreparedStatement prepare;
@@ -248,6 +301,7 @@ public class TeacherMainFormController implements Initializable {
 			attendance_form.setVisible(false);
 			mark_form.setVisible(true);
 
+			loadAttendanceCourses();
 			current_form.setText("Mark form");
 		}
 
@@ -861,6 +915,7 @@ public class TeacherMainFormController implements Initializable {
 			}
 
 			attendance_course.setItems(courses);
+			marks_course.setItems(courses);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1012,6 +1067,109 @@ public class TeacherMainFormController implements Initializable {
 		}
 	}
 
+	private ObservableList<DataResultHandle> getMarkData(String selectedCourse) {
+		ObservableList<DataResultHandle> markData = FXCollections.observableArrayList();
+
+		String sql = "SELECT * FROM teacher_student WHERE teacher_id = ? AND subject_code = ?";
+		try {
+			connect = Database.connectDB();
+			prepare = connect.prepareStatement(sql);
+			prepare.setString(1, teacher_id.getText());
+			prepare.setString(2, selectedCourse);
+			result = prepare.executeQuery();
+
+			while (result.next()) {
+				DataResultHandle data = new DataResultHandle(result.getString("stud_studentID"),
+						result.getString("stud_name"), result.getInt("quiz1"), result.getFloat("quiz2"),
+						result.getFloat("quiz3"), result.getFloat("quiz4"), result.getFloat("mid_term"),
+						result.getFloat("final_exam"));
+				markData.add(data);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return markData;
+	}
+
+	public void loadMarkData() {
+		ObservableList<DataResultHandle> markData = FXCollections.observableArrayList();
+		String sql = "SELECT * FROM teacher_student WHERE subject_code = ? AND teacher_id = ?";
+
+		try {
+			connect = Database.connectDB();
+			prepare = connect.prepareStatement(sql);
+			prepare.setString(1, marks_course.getSelectionModel().getSelectedItem());
+			prepare.setString(2, teacher_id.getText());
+			result = prepare.executeQuery();
+
+			while (result.next()) {
+				DataResultHandle data = new DataResultHandle(result.getString("stud_studentID"),
+						result.getString("stud_name"), result.getFloat("mark_quiz_1"), result.getFloat("mark_quiz_2"),
+						result.getFloat("mark_quiz_3"), result.getFloat("mark_quiz_4"), result.getFloat("mark_final"),
+						result.getFloat("mark_mid_term"));
+				markData.add(data);
+			}
+
+			marks_col_sID.setCellValueFactory(new PropertyValueFactory<>("studentID"));
+			marks_col_name.setCellValueFactory(new PropertyValueFactory<>("studentName"));
+			marks_col_q1.setCellValueFactory(new PropertyValueFactory<>("quiz1"));
+			marks_col_q2.setCellValueFactory(new PropertyValueFactory<>("quiz2"));
+			marks_col_q3.setCellValueFactory(new PropertyValueFactory<>("quiz3"));
+			marks_col_q4.setCellValueFactory(new PropertyValueFactory<>("quiz4"));
+			marks_col_mid.setCellValueFactory(new PropertyValueFactory<>("midTerm"));
+			marks_col_final.setCellValueFactory(new PropertyValueFactory<>("finalExam"));
+
+			marks_table_view.setItems(markData);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void markStudentIDShow() {
+		DataResultHandle tData = marks_table_view.getSelectionModel().getSelectedItem();
+		int num = marks_table_view.getSelectionModel().getSelectedIndex();
+
+		if (num < 0 || tData == null) {
+			return;
+		}
+
+		marks_sID.setText(tData.getStudentID());
+		tf_q1.setText(String.valueOf(tData.getQuiz1()));
+		tf_q2.setText(String.valueOf(tData.getQuiz2()));
+		tf_q3.setText(String.valueOf(tData.getQuiz3()));
+		tf_q4.setText(String.valueOf(tData.getQuiz4()));
+		tf_mid.setText(String.valueOf(tData.getMidTerm()));
+		tf_final.setText(String.valueOf(tData.getFinalExam()));
+
+	}
+
+	public void updateMark(ActionEvent event) {
+		if (marks_sID.getText().isEmpty()) {
+			alert.errorMessage("Please select a student to update marks for.");
+		} else {
+			String sql = "UPDATE teacher_student SET mark_quiz_1 = ?, mark_quiz_2 = ?, mark_quiz_3 = ?, mark_quiz_4 = ?, mark_mid_term = ?, mark_final = ? WHERE stud_studentID = ? AND subject_code = ?";
+			try {
+				connect = Database.connectDB();
+				prepare = connect.prepareStatement(sql);
+				prepare.setFloat(1, Float.parseFloat(tf_q1.getText()));
+				prepare.setFloat(2, Float.parseFloat(tf_q2.getText()));
+				prepare.setFloat(3, Float.parseFloat(tf_q3.getText()));
+				prepare.setFloat(4, Float.parseFloat(tf_q4.getText()));
+				prepare.setFloat(5, Float.parseFloat(tf_mid.getText()));
+				prepare.setFloat(6, Float.parseFloat(tf_final.getText()));
+				prepare.setString(7, marks_sID.getText());
+				prepare.setString(8, marks_course.getSelectionModel().getSelectedItem());
+				prepare.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			// make a alert message
+			alert.successMessage("Marks updated successfully!");
+			loadMarkData();
+		}
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		displayTeacher();
@@ -1022,6 +1180,7 @@ public class TeacherMainFormController implements Initializable {
 		addStudentSubjectList();
 		loadAttendanceCourses();
 		attendance_course.setOnAction(event -> loadAttendanceData());
+		marks_course.setOnAction(event -> loadMarkData());
 
 	}
 
