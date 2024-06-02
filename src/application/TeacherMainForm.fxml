@@ -177,11 +177,11 @@
                                  <children>
                                     <Label layoutX="66.0" layoutY="41.0" text="Course:" />
                                     <ComboBox fx:id="attendance_course" layoutX="115.0" layoutY="37.0" prefWidth="150.0" promptText="Choose..." />
-                                    <Button fx:id="attendance_present_btn" layoutX="43.0" layoutY="386.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="97.0" styleClass="btn" stylesheets="@../Design/MainForm.css" text="Present" />
+                                    <Button fx:id="attendance_present_btn" layoutX="43.0" layoutY="386.0" mnemonicParsing="false" onAction="#markAttendance" prefHeight="36.0" prefWidth="97.0" styleClass="btn" stylesheets="@../Design/MainForm.css" text="Present" />
                                     <Button fx:id="attendance_absent_btn" layoutX="179.0" layoutY="386.0" mnemonicParsing="false" onAction="#addStudentClearBtn" prefHeight="36.0" prefWidth="97.0" styleClass="btn" stylesheets="@../Design/MainForm.css" text="Absent" />
                                     <Button fx:id="take_attendance_btn" layoutX="85.0" layoutY="144.0" mnemonicParsing="false" onAction="#takeAttendence" prefHeight="36.0" prefWidth="137.0" styleClass="btn" stylesheets="@../Design/MainForm.css" text="Take Attendance" />
                                     <Text layoutX="92.0" layoutY="332.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Student ID:" />
-                                    <Label fx:id="attendance_sID" layoutX="162.0" layoutY="319.0" prefHeight="17.0" prefWidth="59.0" text="--------" />
+                                    <Label fx:id="attendance_sID" layoutX="162.0" layoutY="319.0" prefHeight="17.0" prefWidth="92.0" text="--------------" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane layoutX="335.0" layoutY="15.0" prefHeight="533.0" prefWidth="534.0" stylesheets="@../Design/MainForm.css" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="335.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="15.0">
@@ -191,7 +191,7 @@
                                     <String fx:value="radius" />
                                  </styleClass>
                                  <children>
-                                    <TableView fx:id="attendance_table_view" layoutX="14.0" layoutY="15.0" onMouseClicked="#addStudentSelectitem" prefHeight="504.0" prefWidth="507.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="15.0">
+                                    <TableView fx:id="attendance_table_view" layoutX="14.0" layoutY="15.0" onMouseClicked="#attendenceStudentIDShow" prefHeight="504.0" prefWidth="507.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="15.0">
                                        <columns>
                                           <TableColumn fx:id="attendance_col_studentID" prefWidth="75.0" text="Student ID" />
                                           <TableColumn fx:id="attendance_col_name" prefWidth="115.0" text="Name" />

@@ -956,6 +956,62 @@ public class TeacherMainFormController implements Initializable {
 		}
 	}
 
+	public void attendenceStudentIDShow() {
+		DataAttendanceHandle tData = attendance_table_view.getSelectionModel().getSelectedItem();
+		int num = attendance_table_view.getSelectionModel().getSelectedIndex();
+
+		if (num < 0 || tData == null) {
+			return;
+		}
+
+		attendance_sID.setText(tData.getStudentID());
+	}
+
+	public void markAttendance(ActionEvent event) {
+		if (attendance_sID.getText().isEmpty()) {
+			alert.errorMessage("Please select a student to mark attendance for.");
+		} else {
+			// update the database teacher_student table with total_attendance =
+			// total_attendance
+			// + 1;
+			String sql = "UPDATE teacher_student SET total_attendance = total_attendance + 1 WHERE stud_studentID = ? AND subject_code = ?";
+
+			try {
+				connect = Database.connectDB();
+				prepare = connect.prepareStatement(sql);
+				prepare.setString(1, attendance_sID.getText());
+				prepare.setString(2, attendance_course.getSelectionModel().getSelectedItem());
+				System.out.println(attendance_sID.getText());
+				System.out.println("Attendence added");
+				prepare.executeUpdate();
+
+				String selectSQL = "SELECT total_attendance, total_classes FROM teacher_student WHERE stud_studentID = ?";
+				prepare = connect.prepareStatement(selectSQL);
+				prepare.setString(1, attendance_sID.getText());
+				ResultSet rs = prepare.executeQuery();
+
+				if (rs.next()) {
+					int totalAttendance = rs.getInt("total_attendance");
+					int totalClasses = rs.getInt("total_classes");
+
+					// Step 3: Calculate attendance_percentage
+					double attendancePercentage = (double) totalAttendance / totalClasses * 100;
+
+					// Step 4: Update attendance_percentage
+					String updatePercentageSQL = "UPDATE teacher_student SET attendance_percentage = ? WHERE stud_studentID = ?";
+					prepare = connect.prepareStatement(updatePercentageSQL);
+					prepare.setDouble(1, attendancePercentage);
+					prepare.setString(2, attendance_sID.getText());
+					prepare.executeUpdate();
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			loadAttendanceData();
+		}
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		displayTeacher();
