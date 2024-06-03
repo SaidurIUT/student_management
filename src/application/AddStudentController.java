@@ -32,10 +32,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
-/**
- *
- * @author WINDOWS 10
- */
 public class AddStudentController implements Initializable {
 
 	@FXML
